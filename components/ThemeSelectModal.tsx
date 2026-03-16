@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { THEMES, Theme, themeIcon } from "@/lib/mockData";
+import { THEMES, Theme } from "@/lib/mockData";
 
 interface ThemeSelectModalProps {
   selectedIds: string[];
@@ -118,16 +118,13 @@ export default function ThemeSelectModal({ selectedIds, onConfirm, onClose }: Th
                     }`}
                   >
                     {/* Icon */}
-                    <div className="w-full aspect-square rounded-lg overflow-hidden mb-1.5">
-                      <img
-                        src={themeIcon(idx)}
-                        alt={theme.label}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
+                    <div className={`w-full h-10 rounded-lg mb-1.5 flex items-center justify-center text-2xl ${
+                      isSelected ? "bg-amber-100" : "bg-gray-50"
+                    }`}>
+                      {theme.emoji}
                     </div>
                     {/* Label */}
-                    <p className={`text-[10px] font-semibold text-center leading-tight ${isSelected ? "text-amber-700" : "text-gray-700"}`}>
+                    <p className={`text-[11px] font-semibold text-center leading-tight ${isSelected ? "text-amber-700" : "text-gray-700"}`}>
                       {theme.label}
                     </p>
                     {/* Check badge */}

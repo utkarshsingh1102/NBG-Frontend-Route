@@ -83,45 +83,47 @@ function GameDropdown({
   }, [open]);
 
   return (
-    <div ref={ref} className="relative w-full">
+    <div ref={ref} className="relative w-full h-full">
       {/* Trigger */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center gap-2.5 bg-white rounded-2xl border-2 border-dashed border-amber-200 hover:border-amber-400 px-3 py-2.5 transition-all group shadow-sm text-left"
+        className="relative w-full h-full min-h-[140px] flex flex-col items-center justify-center gap-2 bg-white rounded-2xl border-2 border-dashed border-amber-200 hover:border-amber-400 px-4 py-5 transition-all group shadow-sm"
       >
+        {/* Chevron */}
+        <svg
+          width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth={2.5}
+          className={`absolute top-3 right-3 transition-transform ${open ? "rotate-180" : ""}`}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+
         {value ? (
           <>
             <img
               src={thumbSquare(value.title, value.category, allGames.indexOf(value))}
               alt={value.title}
-              className="w-10 h-10 rounded-xl object-cover flex-shrink-0"
+              className="w-14 h-14 rounded-xl object-cover"
             />
-            <div className="flex-1 min-w-0">
+            <div className="text-center">
               <p className="text-[9px] font-semibold text-amber-600 mb-0.5">Source Game</p>
-              <p className="text-[12px] font-bold text-gray-900 truncate">{value.title}</p>
-              <p className="text-[9px] text-gray-400 group-hover:text-amber-600 transition">Tap to change →</p>
+              <p className="text-sm font-bold text-gray-900 leading-tight">{value.title}</p>
+              <p className="text-[10px] text-gray-400 group-hover:text-amber-600 transition mt-0.5">Tap to change →</p>
             </div>
           </>
         ) : (
           <>
-            <div className="w-10 h-10 rounded-xl bg-amber-100 group-hover:bg-amber-200 flex items-center justify-center transition-colors flex-shrink-0">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#f59e0b" strokeWidth={1.8}>
+            <div className="w-12 h-12 rounded-xl bg-amber-100 group-hover:bg-amber-200 flex items-center justify-center transition-colors">
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#f59e0b" strokeWidth={1.8}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h4M8 10v4M14 11h.01M17 13h.01M5 8h14a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2z" />
               </svg>
             </div>
-            <div className="flex-1">
-              <p className="text-xs font-semibold text-gray-800">Source Game</p>
-              <p className="text-[10px] text-gray-500">Search &amp; select a game</p>
+            <div className="text-center">
+              <p className="text-sm font-bold text-gray-800">Source Game</p>
+              <p className="text-xs text-gray-400 mt-0.5">Search &amp; select a game</p>
             </div>
           </>
         )}
-        <svg
-          width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth={2.5}
-          className={`flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
       </button>
 
       {/* Dropdown panel */}
@@ -225,7 +227,7 @@ export default function ThemeRemixContent({ activeCategory, onCategoryChange }: 
       setCustomError("This theme is already added.");
       return;
     }
-    setSelectedThemes((prev) => [...prev, { id: `custom-${Date.now()}`, label }]);
+    setSelectedThemes((prev) => [...prev, { id: `custom-${Date.now()}`, label, emoji: "✨" }]);
     setCustomInput("");
   };
 
@@ -313,24 +315,24 @@ export default function ThemeRemixContent({ activeCategory, onCategoryChange }: 
             <p className="text-gray-500 text-xs mt-0.5">Choose a source game, add themes, then generate</p>
           </div>
 
-          <div className="flex gap-4 justify-center items-start flex-wrap">
+          <div className="flex gap-4 justify-center items-stretch flex-wrap">
             {/* ── Source Game Dropdown ── */}
-            <div className="w-[200px] flex-shrink-0">
+            <div className="w-[260px] flex-shrink-0">
               <GameDropdown value={sourceGame} onChange={setSourceGame} />
             </div>
 
             {/* ── Arrow ── */}
-            <div className="flex items-center h-[60px]">
+            <div className="flex items-center self-center">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(0,0,0,0.3)" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </div>
 
             {/* ── Theme Selection ── */}
-            <div className="flex-1 min-w-[260px] max-w-[420px] bg-white/80 rounded-2xl border border-amber-100 p-4 shadow-sm">
+            <div className="w-[260px] flex-shrink-0 bg-white/80 rounded-2xl border border-amber-100 p-4 shadow-sm">
               {/* Header row */}
               <div className="flex items-center justify-between mb-3">
-                <p className="text-[11px] font-bold text-gray-700 uppercase tracking-wider">
+                <p className="text-xs font-bold text-gray-700 uppercase tracking-wider">
                   Themes
                 </p>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${

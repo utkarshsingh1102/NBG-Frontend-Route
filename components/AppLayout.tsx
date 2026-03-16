@@ -8,6 +8,7 @@ import ThemeRemixContent from "./ThemeRemixContent";
 import YourGenerationContent from "./YourGenerationContent";
 import FavouritesContent from "./FavouritesContent";
 import ReportsContent from "./ReportsContent";
+import ThemeDisplayOptionsContent from "./ThemeDisplayOptionsContent";
 
 export default function AppLayout() {
   const [activeGameId, setActiveGameId] = useState<string | null>(null);
@@ -24,6 +25,8 @@ export default function AppLayout() {
         return <FavouritesContent />;
       case "Reports":
         return <ReportsContent />;
+      case "Theme Display Options":
+        return <ThemeDisplayOptionsContent />;
       default:
         return <MainContent activeCategory={activeCategory} onCategoryChange={setActiveCategory} />;
     }
