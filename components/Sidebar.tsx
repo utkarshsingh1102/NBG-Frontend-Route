@@ -63,16 +63,6 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
-  {
-    label: "Theme Display Options",
-    badge: "5",
-    icon: (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round"
-          d="M4 6h16M4 10h16M4 14h8M4 18h12" />
-      </svg>
-    ),
-  },
 ];
 
 export default function Sidebar({ activeCategory, onSelectCategory, activePage, onNavChange }: SidebarProps) {

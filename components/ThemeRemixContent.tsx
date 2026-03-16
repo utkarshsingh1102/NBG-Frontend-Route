@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect, useRef } from "react";
-import { games as allGames, POPULAR_COMBOS, Game, Theme, thumbSquare } from "@/lib/mockData";
+import { games as allGames, POPULAR_COMBOS, THEMES, Game, Theme, thumbSquare } from "@/lib/mockData";
 import GameGrid from "./GameGrid";
 import ThemeSelectModal from "./ThemeSelectModal";
 import RandomRemixGenerator from "./RandomRemixGenerator";
@@ -11,7 +11,7 @@ interface ThemeRemixContentProps {
   onCategoryChange: (cat: string) => void;
 }
 
-const MAX_THEMES = 5;
+const MAX_THEMES = 10;
 
 const PRONOUNS = new Set([
   "i","me","my","mine","myself","you","your","yours","yourself","he","him","his","himself",
@@ -88,7 +88,7 @@ function GameDropdown({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="relative w-full h-full min-h-[140px] flex flex-col items-center justify-center gap-2 bg-white rounded-2xl border-2 border-dashed border-amber-200 hover:border-amber-400 px-4 py-5 transition-all group shadow-sm"
+        className="relative w-full h-full min-h-[280px] flex flex-col items-center justify-center gap-2 bg-white rounded-2xl border-2 border-dashed border-amber-200 hover:border-amber-400 px-4 py-5 transition-all group shadow-sm"
       >
         {/* Chevron */}
         <svg
@@ -329,9 +329,9 @@ export default function ThemeRemixContent({ activeCategory, onCategoryChange }: 
             </div>
 
             {/* ── Theme Selection ── */}
-            <div className="w-[260px] flex-shrink-0 bg-white/80 rounded-2xl border border-amber-100 p-4 shadow-sm">
+            <div className="w-[260px] flex-shrink-0 bg-white/80 rounded-2xl border border-amber-100 p-4 shadow-sm flex flex-col h-[280px] overflow-hidden">
               {/* Header row */}
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-2 flex-shrink-0">
                 <p className="text-xs font-bold text-gray-700 uppercase tracking-wider">
                   Themes
                 </p>
@@ -344,72 +344,75 @@ export default function ThemeRemixContent({ activeCategory, onCategoryChange }: 
                 </span>
               </div>
 
-              {/* Selected chips */}
+              {/* Selected chips — scrollable */}
               {selectedThemes.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-3">
+                <div className="flex flex-wrap gap-1.5 overflow-y-auto mb-2 flex-1 content-start">
                   {selectedThemes.map((t) => (
                     <ThemeChip key={t.id} label={t.label} onRemove={() => removeTheme(t.id)} />
                   ))}
                 </div>
               )}
 
-              {/* Browse button */}
-              <button
-                onClick={() => setThemeModalOpen(true)}
-                disabled={selectedThemes.length >= MAX_THEMES}
-                className="flex items-center justify-between w-full px-4 py-3 text-sm font-bold text-white bg-amber-500 border border-amber-400 rounded-xl hover:bg-amber-600 hover:border-amber-500 disabled:opacity-40 disabled:cursor-not-allowed transition mb-3 group shadow-sm"
-              >
-                <div className="flex items-center gap-2">
-                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
-                  </svg>
-                  <span>Browse Themes</span>
-                </div>
-                <span className="text-xs font-bold text-amber-700 bg-white px-2.5 py-1 rounded-full">
-                  250+ available
-                </span>
-              </button>
-
-              {/* Divider */}
-              <div className="flex items-center gap-2 mb-3">
-                <div className="flex-1 h-px bg-amber-100" />
-                <span className="text-[10px] text-gray-400 font-medium">or custom</span>
-                <div className="flex-1 h-px bg-amber-100" />
-              </div>
-
-              {/* Custom input */}
-              <div className="flex gap-1.5">
-                <input
-                  type="text"
-                  placeholder="e.g. Volcano, Circus..."
-                  value={customInput}
-                  onChange={(e) => { setCustomInput(e.target.value); setCustomError(""); }}
-                  onKeyDown={(e) => { if (e.key === "Enter") handleAddCustom(); }}
-                  disabled={selectedThemes.length >= MAX_THEMES}
-                  className={`flex-1 px-2.5 py-1.5 text-[11px] border rounded-lg focus:outline-none transition min-w-0 ${
-                    customError ? "border-red-400 bg-red-50" : "border-amber-200 focus:border-amber-400 bg-white"
-                  } disabled:opacity-40 disabled:cursor-not-allowed`}
-                />
+              {/* Controls — centered when no chips */}
+              <div className={`flex flex-col gap-0 flex-shrink-0 ${selectedThemes.length === 0 ? "flex-1 justify-center" : ""}`}>
+                {/* Browse button */}
                 <button
-                  onClick={handleAddCustom}
-                  disabled={!customInput.trim() || selectedThemes.length >= MAX_THEMES || validating}
-                  className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 disabled:bg-gray-200 disabled:text-gray-400 text-white text-[11px] font-semibold rounded-lg transition flex items-center gap-1 flex-shrink-0"
+                  onClick={() => setThemeModalOpen(true)}
+                  disabled={selectedThemes.length >= MAX_THEMES}
+                  className="flex items-center justify-between w-full px-4 py-3 text-sm font-bold text-white bg-amber-500 border border-amber-400 rounded-xl hover:bg-amber-600 hover:border-amber-500 disabled:opacity-40 disabled:cursor-not-allowed transition mb-3 group shadow-sm"
                 >
-                  {validating ? (
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} className="animate-spin">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  <div className="flex items-center gap-2">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
                     </svg>
-                  ) : "Add"}
+                    <span>Browse Themes</span>
+                  </div>
+                  <span className="text-xs font-bold text-amber-700 bg-white px-2.5 py-1 rounded-full">
+                    250+ available
+                  </span>
                 </button>
+
+                {/* Divider */}
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex-1 h-px bg-amber-100" />
+                  <span className="text-[10px] text-gray-400 font-medium">or custom</span>
+                  <div className="flex-1 h-px bg-amber-100" />
+                </div>
+
+                {/* Custom input */}
+                <div className="flex gap-1.5">
+                  <input
+                    type="text"
+                    placeholder="e.g. Volcano, Circus..."
+                    value={customInput}
+                    onChange={(e) => { setCustomInput(e.target.value); setCustomError(""); }}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleAddCustom(); }}
+                    disabled={selectedThemes.length >= MAX_THEMES}
+                    className={`flex-1 px-2.5 py-1.5 text-[11px] border rounded-lg focus:outline-none transition min-w-0 ${
+                      customError ? "border-red-400 bg-red-50" : "border-amber-200 focus:border-amber-400 bg-white"
+                    } disabled:opacity-40 disabled:cursor-not-allowed`}
+                  />
+                  <button
+                    onClick={handleAddCustom}
+                    disabled={!customInput.trim() || selectedThemes.length >= MAX_THEMES || validating}
+                    className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 disabled:bg-gray-200 disabled:text-gray-400 text-white text-[11px] font-semibold rounded-lg transition flex items-center gap-1 flex-shrink-0"
+                  >
+                    {validating ? (
+                      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} className="animate-spin">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    ) : "Add"}
+                  </button>
+                </div>
+                {customError && (
+                  <p className="text-[10px] text-red-500 mt-1 flex items-center gap-1">
+                    <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {customError}
+                  </p>
+                )}
               </div>
-              {customError && (
-                <p className="text-[10px] text-red-500 mt-1 flex items-center gap-1">
-                  <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {customError}
-                </p>
-              )}
             </div>
           </div>
 
