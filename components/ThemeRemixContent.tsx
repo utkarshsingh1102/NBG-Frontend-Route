@@ -355,12 +355,17 @@ export default function ThemeRemixContent({ activeCategory, onCategoryChange }: 
               <button
                 onClick={() => setThemeModalOpen(true)}
                 disabled={selectedThemes.length >= MAX_THEMES}
-                className="flex items-center gap-2 w-full px-3 py-2 text-[12px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-xl hover:bg-amber-100 hover:border-amber-300 disabled:opacity-40 disabled:cursor-not-allowed transition mb-3"
+                className="flex items-center justify-between w-full px-4 py-3 text-sm font-bold text-white bg-amber-500 border border-amber-400 rounded-xl hover:bg-amber-600 hover:border-amber-500 disabled:opacity-40 disabled:cursor-not-allowed transition mb-3 group shadow-sm"
               >
-                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
-                </svg>
-                Browse Themes
+                <div className="flex items-center gap-2">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                  <span>Browse Themes</span>
+                </div>
+                <span className="text-xs font-bold text-amber-700 bg-white px-2.5 py-1 rounded-full">
+                  250+ available
+                </span>
               </button>
 
               {/* Divider */}

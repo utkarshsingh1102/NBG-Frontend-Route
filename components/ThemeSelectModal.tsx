@@ -80,7 +80,7 @@ export default function ThemeSelectModal({ selectedIds, onConfirm, onClose }: Th
             />
           </div>
           <p className="text-xs mt-2">
-            <span className="text-gray-400">{filtered.length} themes available</span>
+            <span className="text-gray-400">250+ themes available{search.trim() && ` · ${filtered.length} matching`}</span>
             {pending.length > 0 && (
               <span className={pending.length >= MAX_THEMES ? " · text-red-500 font-semibold" : " · text-gray-500"}>
                 {` ${pending.length}/${MAX_THEMES} selected`}
