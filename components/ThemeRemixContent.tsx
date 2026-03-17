@@ -9,6 +9,8 @@ import RandomRemixGenerator from "./RandomRemixGenerator";
 interface ThemeRemixContentProps {
   activeCategory: string;
   onCategoryChange: (cat: string) => void;
+  userGames: Game[];
+  onNavigateToAddGame: () => void;
 }
 
 const MAX_THEMES = 10;
@@ -55,19 +57,25 @@ function ThemeChip({ label, onRemove }: { label: string; onRemove: () => void })
 function GameDropdown({
   value,
   onChange,
+  userGames,
+  onNavigateToAddGame,
 }: {
   value: Game | null;
   onChange: (game: Game) => void;
+  userGames: Game[];
+  onNavigateToAddGame: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [userSectionOpen, setUserSectionOpen] = useState(true);
+  const [systemSectionOpen, setSystemSectionOpen] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
 
   const filtered = useMemo(() => {
-    if (!search.trim()) return allGames;
+    if (!search.trim()) return [];
     const q = search.toLowerCase();
-    return allGames.filter((g) => g.title.toLowerCase().includes(q));
-  }, [search]);
+    return [...userGames, ...allGames].filter((g) => g.title.toLowerCase().includes(q));
+  }, [search, userGames]);
 
   // Close on outside click
   useEffect(() => {
@@ -81,6 +89,39 @@ function GameDropdown({
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
+
+  function GameRow({ game, isUserGame }: { game: Game; isUserGame?: boolean }) {
+    const idx = isUserGame ? 100 + userGames.indexOf(game) : allGames.indexOf(game);
+    const isSelected = value?.id === game.id;
+    return (
+      <button
+        type="button"
+        onClick={() => { onChange(game); setOpen(false); setSearch(""); }}
+        className={`flex items-center gap-2.5 w-full px-3 py-2 text-left transition-colors ${
+          isSelected ? "bg-amber-50" : "hover:bg-gray-50"
+        }`}
+      >
+        <img
+          src={thumbSquare(game.title, game.category, idx)}
+          alt={game.title}
+          className="w-8 h-8 rounded-lg object-cover flex-shrink-0"
+          loading="lazy"
+        />
+        <div className="flex-1 min-w-0">
+          <p className="text-[12px] font-semibold text-gray-800 truncate">{game.title}</p>
+          <p className="text-[10px] text-gray-400">{game.category}</p>
+        </div>
+        {isUserGame && (
+          <span className="text-[8px] font-bold bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded-full flex-shrink-0">YOURS</span>
+        )}
+        {isSelected && (
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#f59e0b" strokeWidth={3}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        )}
+      </button>
+    );
+  }
 
   return (
     <div ref={ref} className="relative w-full h-full">
@@ -101,7 +142,7 @@ function GameDropdown({
         {value ? (
           <>
             <img
-              src={thumbSquare(value.title, value.category, allGames.indexOf(value))}
+              src={thumbSquare(value.title, value.category, userGames.includes(value) ? 100 + userGames.indexOf(value) : allGames.indexOf(value))}
               alt={value.title}
               className="w-14 h-14 rounded-xl object-cover"
             />
@@ -145,40 +186,105 @@ function GameDropdown({
               />
             </div>
           </div>
+
           {/* List */}
-          <div className="max-h-56 overflow-y-auto">
-            {filtered.length === 0 ? (
-              <p className="text-xs text-gray-400 text-center py-6">No games found</p>
-            ) : (
-              filtered.map((game) => {
-                const isSelected = value?.id === game.id;
-                return (
+          <div className="max-h-64 overflow-y-auto">
+            {search.trim() ? (
+              /* Search results */
+              filtered.length === 0 ? (
+                <div className="flex flex-col items-center py-5 gap-2">
+                  <p className="text-xs text-gray-400">No games found for &quot;{search}&quot;</p>
                   <button
-                    key={game.id}
                     type="button"
-                    onClick={() => { onChange(game); setOpen(false); setSearch(""); }}
-                    className={`flex items-center gap-2.5 w-full px-3 py-2 text-left transition-colors ${
-                      isSelected ? "bg-amber-50" : "hover:bg-gray-50"
-                    }`}
+                    onClick={() => { setOpen(false); setSearch(""); onNavigateToAddGame(); }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg text-[11px] font-semibold text-amber-700 transition"
                   >
-                    <img
-                      src={thumbSquare(game.title, game.category, allGames.indexOf(game))}
-                      alt={game.title}
-                      className="w-8 h-8 rounded-lg object-cover flex-shrink-0"
-                      loading="lazy"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[12px] font-semibold text-gray-800 truncate">{game.title}</p>
-                      <p className="text-[10px] text-gray-400">{game.category}</p>
-                    </div>
-                    {isSelected && (
-                      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#f59e0b" strokeWidth={3}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    )}
+                    <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add &quot;{search}&quot; as a new game
                   </button>
-                );
-              })
+                </div>
+              ) : (
+                filtered.map((game) => (
+                  <GameRow key={game.id} game={game} isUserGame={userGames.includes(game)} />
+                ))
+              )
+            ) : (
+              /* Sectioned view */
+              <>
+                {/* Your Games section */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setUserSectionOpen((o) => !o)}
+                    className="flex items-center justify-between w-full px-3 py-2 bg-gray-50 hover:bg-gray-100 transition text-left border-b border-gray-100"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wider">Your Games</span>
+                      <span className="text-[9px] bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded-full">
+                        {userGames.length}
+                      </span>
+                    </div>
+                    <svg
+                      width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
+                      className={`text-gray-400 transition-transform ${userSectionOpen ? "rotate-180" : ""}`}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {userSectionOpen && (
+                    <>
+                      {userGames.map((game) => (
+                        <GameRow key={game.id} game={game} isUserGame />
+                      ))}
+                      {/* Add a Game row */}
+                      <button
+                        type="button"
+                        onClick={() => { setOpen(false); setSearch(""); onNavigateToAddGame(); }}
+                        className="flex items-center gap-2.5 w-full px-3 py-2 hover:bg-amber-50 transition text-left border-t border-dashed border-amber-100"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-amber-100 hover:bg-amber-200 flex items-center justify-center flex-shrink-0 transition-colors">
+                          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#d97706" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-[12px] font-semibold text-amber-600">Add a New Game</p>
+                          <p className="text-[10px] text-gray-400">Submit via store link</p>
+                        </div>
+                      </button>
+                    </>
+                  )}
+                </div>
+
+                {/* System Games section */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setSystemSectionOpen((o) => !o)}
+                    className="flex items-center justify-between w-full px-3 py-2 bg-gray-50 hover:bg-gray-100 transition text-left border-b border-gray-100"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wider">System Games</span>
+                      <span className="text-[9px] bg-gray-200 text-gray-600 font-bold px-1.5 py-0.5 rounded-full">
+                        {allGames.length}
+                      </span>
+                    </div>
+                    <svg
+                      width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
+                      className={`text-gray-400 transition-transform ${systemSectionOpen ? "rotate-180" : ""}`}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {systemSectionOpen && allGames.map((game) => (
+                    <GameRow key={game.id} game={game} />
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -188,7 +294,7 @@ function GameDropdown({
 }
 
 // ── Main Component ────────────────────────────────────────────────────────────
-export default function ThemeRemixContent({ activeCategory, onCategoryChange }: ThemeRemixContentProps) {
+export default function ThemeRemixContent({ activeCategory, onCategoryChange, userGames, onNavigateToAddGame }: ThemeRemixContentProps) {
   const [sourceGame, setSourceGame] = useState<Game | null>(null);
   const [selectedThemes, setSelectedThemes] = useState<Theme[]>([]);
   const [themeModalOpen, setThemeModalOpen] = useState(false);
@@ -322,7 +428,12 @@ export default function ThemeRemixContent({ activeCategory, onCategoryChange }: 
           <div className="flex gap-4 justify-center items-stretch flex-wrap">
             {/* ── Source Game Dropdown ── */}
             <div className="w-[260px] flex-shrink-0">
-              <GameDropdown value={sourceGame} onChange={setSourceGame} />
+              <GameDropdown
+                value={sourceGame}
+                onChange={setSourceGame}
+                userGames={userGames}
+                onNavigateToAddGame={onNavigateToAddGame}
+              />
             </div>
 
             {/* ── Arrow ── */}

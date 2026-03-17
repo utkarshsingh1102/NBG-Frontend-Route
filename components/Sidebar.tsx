@@ -63,6 +63,16 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  {
+    label: "Add New Game",
+    badge: null,
+    icon: (
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round"
+          d="M12 4v16m8-8H4" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Sidebar({ activeCategory, onSelectCategory, activePage, onNavChange }: SidebarProps) {

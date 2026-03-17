@@ -9,10 +9,12 @@ import RandomRemixGenerator from "./RandomRemixGenerator";
 interface MainContentProps {
   activeCategory: string;
   onCategoryChange: (cat: string) => void;
+  userGames: Game[];
+  onNavigateToAddGame: () => void;
 }
 
 
-export default function MainContent({ activeCategory, onCategoryChange }: MainContentProps) {
+export default function MainContent({ activeCategory, onCategoryChange, userGames, onNavigateToAddGame }: MainContentProps) {
   const [sourceModalOpen, setSourceModalOpen] = useState(false);
   const [targetModalOpen, setTargetModalOpen] = useState(false);
   const [sourceGame, setSourceGame] = useState<Game | null>(null);
@@ -260,6 +262,8 @@ export default function MainContent({ activeCategory, onCategoryChange }: MainCo
         <GameSelectModal
           slot={1}
           selectedId={sourceGame?.id ?? null}
+          userGames={userGames}
+          onNavigateToAddGame={() => { setSourceModalOpen(false); onNavigateToAddGame(); }}
           onSelect={(game) => { setSourceGame(game); setSourceModalOpen(false); }}
           onClose={() => setSourceModalOpen(false)}
         />
@@ -271,6 +275,8 @@ export default function MainContent({ activeCategory, onCategoryChange }: MainCo
           slot={2}
           selectedIds={targetGames.map((g) => g.id)}
           multiSelect
+          userGames={userGames}
+          onNavigateToAddGame={() => { setTargetModalOpen(false); onNavigateToAddGame(); }}
           onMultiSelect={(games) => { setTargetGames(games); setTargetModalOpen(false); }}
           onClose={() => setTargetModalOpen(false)}
         />
