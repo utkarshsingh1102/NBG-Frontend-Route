@@ -86,6 +86,28 @@ export default function Sidebar({ activeCategory, onSelectCategory, activePage, 
 
         {/* ── NAVIGATION ── */}
         <div className="px-3 pt-4 pb-1">
+          {/* NBG Ideas — top featured item */}
+          <div className="mb-2 rounded-xl border-2 border-amber-400" style={{ background: "linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)" }}>
+            <button
+              onClick={() => onNavChange("NBG Ideas")}
+              className={`flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-left transition-all ${
+                activeNav === "NBG Ideas"
+                  ? "bg-amber-100/80"
+                  : "hover:bg-amber-100/60"
+              }`}
+            >
+              <span className="text-amber-500 flex-shrink-0">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 17l2.5-8 4.5 4L12 5l2 8 4.5-4 2.5 8H3z" />
+                </svg>
+              </span>
+              <span className="flex-1 text-[13px] font-bold text-amber-800">NBG Ideas</span>
+              <span className="text-[8px] font-extrabold bg-amber-500 text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide leading-none">
+                New
+              </span>
+            </button>
+          </div>
+
           <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest px-2 mb-1.5">
             Navigation
           </p>

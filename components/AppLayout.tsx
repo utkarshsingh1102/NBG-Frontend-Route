@@ -10,6 +10,7 @@ import YourGenerationContent from "./YourGenerationContent";
 import FavouritesContent from "./FavouritesContent";
 import ReportsContent from "./ReportsContent";
 import AddNewGameContent from "./AddNewGameContent";
+import NBGIdeasContent from "./NBGIdeasContent";
 
 export default function AppLayout() {
   const [activeGameId, setActiveGameId] = useState<string | null>(null);
@@ -49,6 +50,8 @@ export default function AppLayout() {
         return <FavouritesContent />;
       case "Reports":
         return <ReportsContent />;
+      case "NBG Ideas":
+        return <NBGIdeasContent />;
       case "Add New Game":
         return <AddNewGameContent onGameAdded={handleAddUserGame} directToForm={addGameDirectToForm} />;
       default:

@@ -44,7 +44,7 @@ export default function AddNewGameContent({ onGameAdded }: AddNewGameContentProp
 
   // Form state
   const [gameName, setGameName] = useState("");
-  const [category, setCategory] = useState<Game["category"]>("Casual");
+  const category: Game["category"] = "Puzzle";
   const [storeUrl, setStoreUrl] = useState("");
   const [urlError, setUrlError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -98,7 +98,6 @@ export default function AddNewGameContent({ onGameAdded }: AddNewGameContentProp
 
     // Reset form and show success banner
     setGameName("");
-    setCategory("Casual");
     setStoreUrl("");
     setUrlError("");
     setSubmitSuccess(true);
@@ -123,6 +122,9 @@ export default function AddNewGameContent({ onGameAdded }: AddNewGameContentProp
                 An approval request will be emailed to admin after submission
               </p>
             </div>
+            <span className="text-[11px] font-semibold text-purple-700 bg-purple-50 border border-purple-100 px-3 py-1.5 rounded-full flex-shrink-0">
+              Puzzle games only
+            </span>
           </div>
 
           {/* Success banner */}
@@ -140,35 +142,19 @@ export default function AddNewGameContent({ onGameAdded }: AddNewGameContentProp
           )}
 
           <div className="px-6 py-5 space-y-4">
-            {/* Row: Game Name + Category */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-semibold text-gray-600 block mb-1.5">
-                  Game Name <span className="text-red-400">*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Candy Crush Saga"
-                  value={gameName}
-                  onChange={(e) => setGameName(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
-                  className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400 transition bg-gray-50 focus:bg-white"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-gray-600 block mb-1.5">
-                  Category <span className="text-red-400">*</span>
-                </label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value as Game["category"])}
-                  className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400 transition bg-gray-50 focus:bg-white"
-                >
-                  {CATEGORIES.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              </div>
+            {/* Game Name */}
+            <div>
+              <label className="text-xs font-semibold text-gray-600 block mb-1.5">
+                Game Name <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Candy Crush Saga"
+                value={gameName}
+                onChange={(e) => setGameName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
+                className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-amber-400 transition bg-gray-50 focus:bg-white"
+              />
             </div>
 
             {/* Store URL */}
