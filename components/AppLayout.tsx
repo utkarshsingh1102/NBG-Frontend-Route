@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Game } from "@/lib/mockData";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
@@ -13,12 +14,20 @@ import AddNewGameContent from "./AddNewGameContent";
 import NBGIdeasContent from "./NBGIdeasContent";
 
 export default function AppLayout() {
+  const searchParams = useSearchParams();
   const [activeGameId, setActiveGameId] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
-  const [activePage, setActivePage] = useState("Game Fusion");
+  const [activePage, setActivePage] = useState(() => searchParams.get("page") || "Game Fusion");
   const [userGames, setUserGames] = useState<Game[]>([]);
 
   const [addGameDirectToForm, setAddGameDirectToForm] = useState(false);
+
+  // Establish session for the secure report viewer
+  useEffect(() => {
+    document.cookie = "nbg_session=active; path=/; SameSite=Strict";
+    sessionStorage.setItem("nbg_session", "active");
+    sessionStorage.setItem("nbg_user", "NBG User");
+  }, []);
 
   const handleAddUserGame = (game: Game) =>
     setUserGames((prev) => [...prev, game]);

@@ -8,7 +8,11 @@
       "Bash(npm install:*)",
       "Bash(cp node_modules/pdfjs-dist/build/pdf.worker.min.mjs public/pdf.worker.min.mjs)",
       "Bash(node -e \"const p = require\\(''./node_modules/pdfjs-dist/package.json''\\); console.log\\(p.version\\)\")",
-      "Bash(node -e \"const p = require\\(''''./node_modules/pdfjs-dist/package.json''''\\); console.log\\(p.version\\)\")"
+      "Bash(node -e \"const p = require\\(''''./node_modules/pdfjs-dist/package.json''''\\); console.log\\(p.version\\)\")",
+      "Bash(find /Users/utkarshsingh/Desktop/NBG-Frontend-Page -type f \\\\\\(-path */api/reports* -o -path */reports/* -o -name *reports* \\\\\\))"
+    ],
+    "additionalDirectories": [
+      "/Users/utkarshsingh/Desktop/NBG-Frontend-Page/app/api/reports"
     ]
   }
 }

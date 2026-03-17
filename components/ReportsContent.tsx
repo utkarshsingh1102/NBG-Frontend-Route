@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -346,6 +347,7 @@ function PremiumModal({ onClose }: { onClose: () => void }) {
 // ── Main component ────────────────────────────────────────────────────────────
 
 export default function ReportsContent() {
+  const router = useRouter();
   const [premiumOpen, setPremiumOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<ReportType | "All">("All");
   const [fromMonth, setFromMonth] = useState<number | null>(null);
@@ -516,12 +518,12 @@ export default function ReportsContent() {
               return (
                 <div
                   key={report.id}
-                  className={`rounded-2xl overflow-hidden border bg-white shadow-sm transition-all ${
+                  className={`rounded-2xl overflow-hidden border bg-white shadow-sm transition-all cursor-pointer ${
                     isLocked
-                      ? "border-amber-200/60 cursor-pointer group/locked"
+                      ? "border-amber-200/60 group/locked"
                       : "border-gray-100 hover:shadow-md hover:border-amber-200"
                   }`}
-                  onClick={isLocked ? () => setPremiumOpen(true) : undefined}
+                  onClick={isLocked ? () => setPremiumOpen(true) : () => router.push(`/reports/${report.id}`)}
                 >
                   {/* ── Thumbnail ── */}
                   <div className="relative w-full aspect-video bg-gray-100 overflow-hidden">
