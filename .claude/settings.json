@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(find /Users/utkarshsingh/Desktop/NBG-Frontend-Page -not -path */node_modules/* -not -path */.next/* -not -path */.git/* -type f)"
     ]
   }
 }

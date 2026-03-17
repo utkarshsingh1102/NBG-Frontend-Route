@@ -196,6 +196,10 @@ export default function ThemeRemixContent({ activeCategory, onCategoryChange }: 
   const [customError, setCustomError] = useState("");
   const [validating, setValidating] = useState(false);
   const [toast, setToast] = useState(false);
+  const [suggestions, setSuggestions] = useState<Theme[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestionPos, setSuggestionPos] = useState({ top: 0, left: 0, width: 0 });
+  const customInputRef = useRef<HTMLInputElement>(null);
 
   const filtered = useMemo(() => {
     if (activeCategory === "All") return allGames;
@@ -382,11 +386,35 @@ export default function ThemeRemixContent({ activeCategory, onCategoryChange }: 
                 {/* Custom input */}
                 <div className="flex gap-1.5">
                   <input
+                    ref={customInputRef}
                     type="text"
                     placeholder="e.g. Volcano, Circus..."
                     value={customInput}
-                    onChange={(e) => { setCustomInput(e.target.value); setCustomError(""); }}
-                    onKeyDown={(e) => { if (e.key === "Enter") handleAddCustom(); }}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setCustomInput(val);
+                      setCustomError("");
+                      if (val.trim()) {
+                        const q = val.trim().toLowerCase();
+                        const matches = THEMES
+                          .filter((t) => t.label.toLowerCase().includes(q) && !selectedThemes.some((s) => s.id === t.id))
+                          .slice(0, 6);
+                        setSuggestions(matches);
+                        if (matches.length > 0 && customInputRef.current) {
+                          const rect = customInputRef.current.getBoundingClientRect();
+                          setSuggestionPos({ top: rect.bottom, left: rect.left, width: rect.width });
+                        }
+                        setShowSuggestions(matches.length > 0);
+                      } else {
+                        setSuggestions([]);
+                        setShowSuggestions(false);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") { setShowSuggestions(false); handleAddCustom(); }
+                      if (e.key === "Escape") setShowSuggestions(false);
+                    }}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
                     disabled={selectedThemes.length >= MAX_THEMES}
                     className={`flex-1 px-2.5 py-1.5 text-[11px] border rounded-lg focus:outline-none transition min-w-0 ${
                       customError ? "border-red-400 bg-red-50" : "border-amber-200 focus:border-amber-400 bg-white"
@@ -477,6 +505,44 @@ export default function ThemeRemixContent({ activeCategory, onCategoryChange }: 
           <GameGrid games={filtered} />
         </section>
       </main>
+
+      {/* Custom theme suggestions dropdown */}
+      {showSuggestions && suggestions.length > 0 && (
+        <div
+          style={{
+            position: "fixed",
+            top: suggestionPos.top,
+            left: suggestionPos.left,
+            width: suggestionPos.width,
+            transform: "translateY(4px)",
+            zIndex: 100,
+          }}
+          className="bg-white rounded-xl border border-amber-200 shadow-xl overflow-hidden"
+        >
+          <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-wider px-3 pt-2 pb-1">Suggestions</p>
+          {suggestions.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                if (selectedThemes.length < MAX_THEMES && !selectedThemes.some((s) => s.id === t.id)) {
+                  setSelectedThemes((prev) => [...prev, t]);
+                  const remaining = suggestions.filter((s) => s.id !== t.id);
+                  setSuggestions(remaining);
+                  if (remaining.length === 0) setShowSuggestions(false);
+                }
+                customInputRef.current?.focus();
+              }}
+              className="flex items-center gap-2 w-full px-3 py-1.5 hover:bg-amber-50 transition-colors text-left"
+            >
+              <span className="text-sm">{t.emoji}</span>
+              <span className="text-[11px] font-medium text-gray-700 flex-1">{t.label}</span>
+              {t.genre && <span className="text-[9px] text-gray-400 bg-amber-50 px-1.5 py-0.5 rounded-full">{t.genre}</span>}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Theme select modal */}
       {themeModalOpen && (
