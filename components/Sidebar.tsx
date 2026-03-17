@@ -54,16 +54,6 @@ const NAV_ITEMS = [
     ),
   },
   {
-    label: "Reports",
-    badge: null,
-    icon: (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round"
-          d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-      </svg>
-    ),
-  },
-  {
     label: "Add New Game",
     badge: null,
     icon: (
@@ -104,6 +94,28 @@ export default function Sidebar({ activeCategory, onSelectCategory, activePage, 
               <span className="flex-1 text-[13px] font-bold text-amber-800">NBG Ideas</span>
               <span className="text-[8px] font-extrabold bg-amber-500 text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide leading-none">
                 New
+              </span>
+            </button>
+          </div>
+
+          {/* Reports — second featured item */}
+          <div className="mb-2 rounded-xl border-2 border-blue-200" style={{ background: "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)" }}>
+            <button
+              onClick={() => onNavChange("Reports")}
+              className={`flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-left transition-all ${
+                activeNav === "Reports"
+                  ? "bg-blue-100/80"
+                  : "hover:bg-blue-100/60"
+              }`}
+            >
+              <span className="text-blue-500 flex-shrink-0">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </span>
+              <span className="flex-1 text-[13px] font-bold text-blue-800">Reports</span>
+              <span className="text-[8px] font-extrabold bg-blue-500 text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide leading-none">
+                Pro
               </span>
             </button>
           </div>
