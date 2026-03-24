@@ -278,12 +278,45 @@ export const QUEUE_ITEMS: QueueItem[] = [
 ];
 
 export const POPULAR_COMBOS: Array<{ game1Id: string; game2Id: string; label: string; group: string }> = [
-  { game1Id: "1",  game2Id: "6",  label: "Top Puzzle Rivals",  group: "Puzzle" },
-  { game1Id: "38", game2Id: "44", label: "Match-3 Showdown",   group: "Puzzle" },
-  { game1Id: "60", game2Id: "64", label: "Hypercasual Kings",  group: "Casual" },
-  { game1Id: "13", game2Id: "15", label: "Casual Comparison",  group: "Casual" },
-  { game1Id: "31", game2Id: "37", label: "Runner Face-off",    group: "Action" },
-  { game1Id: "50", game2Id: "54", label: "Best Merge Games",   group: "Strategy" },
+  // Puzzle
+  { game1Id: "1",  game2Id: "6",  label: "Top Puzzle Rivals",   group: "Puzzle" },
+  { game1Id: "9",  game2Id: "12", label: "Sort & Solve",         group: "Puzzle" },
+  { game1Id: "2",  game2Id: "4",  label: "Block Jam Clash",      group: "Puzzle" },
+  // Casual
+  { game1Id: "13", game2Id: "15", label: "Casual Comparison",   group: "Casual" },
+  { game1Id: "18", game2Id: "21", label: "Park & Match",         group: "Casual" },
+  { game1Id: "16", game2Id: "19", label: "Dish vs Crowd",        group: "Casual" },
+  // Arcade
+  { game1Id: "23", game2Id: "30", label: "Arcade Showdown",      group: "Arcade" },
+  { game1Id: "25", game2Id: "29", label: "Rush & Smash",         group: "Arcade" },
+  { game1Id: "24", game2Id: "28", label: "Aqua vs Bounce",       group: "Arcade" },
+  // Runner
+  { game1Id: "31", game2Id: "37", label: "Runner Face-off",      group: "Runner" },
+  { game1Id: "33", game2Id: "35", label: "Temple vs Parkour",    group: "Runner" },
+  { game1Id: "32", game2Id: "36", label: "Road vs Sky Jump",     group: "Runner" },
+  // Match3
+  { game1Id: "38", game2Id: "44", label: "Match-3 Showdown",    group: "Match3" },
+  { game1Id: "39", game2Id: "42", label: "Gem vs Jewel",         group: "Match3" },
+  { game1Id: "40", game2Id: "41", label: "Blast vs Cookie",      group: "Match3" },
+  // Strategy
+  { game1Id: "45", game2Id: "48", label: "Tower vs Empire",      group: "Strategy" },
+  { game1Id: "46", game2Id: "47", label: "Kingdom Siege",        group: "Strategy" },
+  // Merge
+  { game1Id: "50", game2Id: "54", label: "Merge Titans",         group: "Merge" },
+  { game1Id: "51", game2Id: "52", label: "Town vs Magic",        group: "Merge" },
+  { game1Id: "53", game2Id: "50", label: "Castle vs Dragon",     group: "Merge" },
+  // Idle
+  { game1Id: "55", game2Id: "57", label: "Idle vs Clicker",      group: "Idle" },
+  { game1Id: "56", game2Id: "58", label: "Factory vs Bakery",    group: "Idle" },
+  { game1Id: "59", game2Id: "55", label: "Space vs Mine Idle",   group: "Idle" },
+  // Hypercasual
+  { game1Id: "60", game2Id: "70", label: "Stack vs Water Sort",  group: "Hypercasual" },
+  { game1Id: "61", game2Id: "67", label: "Helix vs Roller",      group: "Hypercasual" },
+  { game1Id: "62", game2Id: "64", label: "Knife vs Crowd City",  group: "Hypercasual" },
+  // Simulation
+  { game1Id: "71", game2Id: "75", label: "Resto vs Diary",       group: "Simulation" },
+  { game1Id: "82", game2Id: "83", label: "Garden vs Home",       group: "Simulation" },
+  { game1Id: "72", game2Id: "74", label: "Farm vs Pet Hotel",    group: "Simulation" },
 ];
 
 export const categories = ["All", "Puzzle", "Casual", "Arcade", "Runner", "Match3", "Strategy", "Merge", "Idle", "Hypercasual", "Simulation"];

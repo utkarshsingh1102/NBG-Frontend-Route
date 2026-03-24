@@ -12,6 +12,11 @@ import FavouritesContent from "./FavouritesContent";
 import ReportsContent from "./ReportsContent";
 import AddNewGameContent from "./AddNewGameContent";
 import NBGIdeasContent from "./NBGIdeasContent";
+import GameFusionA from "./GameFusionA";
+import GameFusionB from "./GameFusionB";
+import GameFusionC from "./GameFusionC";
+import GameFusionD from "./GameFusionD";
+import GameFusionE from "./GameFusionE";
 
 export default function AppLayout() {
   const searchParams = useSearchParams();
@@ -61,7 +66,52 @@ export default function AppLayout() {
         return <ReportsContent />;
       case "NBG Ideas":
         return <NBGIdeasContent />;
-      case "Add New Game":
+      case "Fusion A · Tab Filter":
+        return (
+          <GameFusionA
+            activeCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
+            userGames={userGames}
+            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
+          />
+        );
+      case "Fusion B · Category Groups":
+        return (
+          <GameFusionB
+            activeCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
+            userGames={userGames}
+            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
+          />
+        );
+      case "Fusion C · Smart Filter":
+        return (
+          <GameFusionC
+            activeCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
+            userGames={userGames}
+            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
+          />
+        );
+      case "Fusion D · Dropdown":
+        return (
+          <GameFusionD
+            activeCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
+            userGames={userGames}
+            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
+          />
+        );
+      case "Fusion E · Cat-First":
+        return (
+          <GameFusionE
+            activeCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
+            userGames={userGames}
+            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
+          />
+        );
+case "Add New Game":
         return <AddNewGameContent onGameAdded={handleAddUserGame} directToForm={addGameDirectToForm} />;
       default:
         return (

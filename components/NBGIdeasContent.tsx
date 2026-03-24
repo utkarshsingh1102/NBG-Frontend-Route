@@ -6,58 +6,156 @@ const UNLOCKED_COUNT = 3;
 const PAGE_SIZE = 20;
 const TOTAL_COUNT = 197;
 
+type IdeaCategory = "Puzzle" | "Casual" | "Arcade" | "Runner" | "Match3" | "Strategy" | "Merge" | "Idle" | "Hypercasual" | "Simulation";
+
+const IDEA_CATEGORIES: Array<IdeaCategory | "All"> = [
+  "All", "Puzzle", "Idle", "Casual", "Arcade", "Runner", "Match3", "Strategy", "Merge", "Hypercasual", "Simulation",
+];
+
 interface GameIdea {
   id: string;
   title: string;
   sourcedFrom: string;
   isNew?: boolean;
-  color: string;   // fallback gradient hex when no image
-  image?: string;  // path under /public, served as static asset
+  color: string;
+  image?: string;
+  category: IdeaCategory;
 }
 
 const ALL_GAME_IDEAS: GameIdea[] = [
-  // ── Page 1 (matches screenshot) — images 1–20 ────────────────────────────────
-  { id: "g1",  title: "Skewer Sizzle Jam",            sourcedFrom: "Foodie Sizzle + Farm Jam: Animal Parking Game",       isNew: true,  color: "F4845F", image: "/game-ideas/1.png"  },
-  { id: "g2",  title: "Semantic Slide",                sourcedFrom: "Ring Crash + Associations: Colorwood Game",                         color: "E63946", image: "/game-ideas/2.png"  },
-  { id: "g3",  title: "Conveyor Block Crush",          sourcedFrom: "Block Crush + Yarn Flow",                                           color: "2A9D8F", image: "/game-ideas/3.png"  },
-  { id: "g4",  title: "Maze Jam: Paint & Park",        sourcedFrom: "Bubble Buz: Parking Jam Puzzle + AMAZE!",            isNew: true,  color: "6A4C93", image: "/game-ideas/4.png"  },
-  { id: "g5",  title: "Knit Blast",                    sourcedFrom: "Sand Blast + Knit Out",                                             color: "3A86FF", image: "/game-ideas/5.png"  },
-  { id: "g6",  title: "Traffic Transit Jam",           sourcedFrom: "Traffic Escape + Bubble Bus: Parking Jam Puzzle",                  color: "FF006E", image: "/game-ideas/6.png"  },
-  { id: "g7",  title: "Traffic Match: Cargo Jam",      sourcedFrom: "Hotpot Go: Food Sort + Car Out",                                    color: "FB5607", image: "/game-ideas/7.png"  },
-  { id: "g8",  title: "Blast Match 3D",                sourcedFrom: "Triple Match City + Toon Blast",                                    color: "FFBE0B", image: "/game-ideas/8.png"  },
-  { id: "g9",  title: "Super Dispatch: Hero Jam",      sourcedFrom: "Beads Out + Superhero",                                             color: "06D6A0", image: "/game-ideas/9.png"  },
-  { id: "g10", title: "Target Match City",             sourcedFrom: "Triple Match City + Found It!",                                     color: "118AB2", image: "/game-ideas/10.png" },
-  { id: "g11", title: "City Gate Match",               sourcedFrom: "Triple Match City + Coffee Run Puzzle",                             color: "EF476F"                              }, // 11.png missing
-  { id: "g12", title: "City Delivery Jam",             sourcedFrom: "Triple Match City + Skewer Jam",                                    color: "1B4332", image: "/game-ideas/12.png" },
-  { id: "g13", title: "Lion Dance Jam",                sourcedFrom: "Crowd Express + Lion",                                              color: "7209B7", image: "/game-ideas/13.png" },
-  { id: "g14", title: "Project SGDF: Alien Beam-Up",   sourcedFrom: "Knit Out + sgdfgbsf",                               isNew: true,  color: "480CA8", image: "/game-ideas/14.png" },
-  { id: "g15", title: "Pride Path: Cub Rescue",        sourcedFrom: "Hole People + Lion",                                               color: "3A0CA3", image: "/game-ideas/15.png" },
-  { id: "g16", title: "Syrup Sinkhole: Waffle Order",  sourcedFrom: "All In Hole: Black Hole Games + Waffle",            isNew: true,  color: "F72585", image: "/game-ideas/16.png" },
-  { id: "g17", title: "Colorwood Puller 3D",           sourcedFrom: "Colorwood Sort Puzzle Game + Marble Puller",                       color: "4CC9F0", image: "/game-ideas/17.png" },
-  { id: "g18", title: "Pixel Loop: Color Flow",        sourcedFrom: "Brilliant Sort + Hotpot Flow: Food Game",                          color: "4361EE", image: "/game-ideas/18.png" },
-  { id: "g19", title: "Cargo Dock Jam",                sourcedFrom: "Color Block Jam + Load the Dishes",                                color: "3F37C9", image: "/game-ideas/19.png" },
-  { id: "g20", title: "Block Conveyor Jam",            sourcedFrom: "Block Crush + Yarn Flow",                           isNew: true,  color: "560BAD", image: "/game-ideas/20.png" },
-  // ── Pages 2+ — images 21–31, then color fallback ─────────────────────────────
-  { id: "g21", title: "Terminal Loop Jam",             sourcedFrom: "Mnt Jam + Yarn Flow",                                              color: "D62828", image: "/game-ideas/21.png" },
-  { id: "g22", title: "Block Jam + Yarn Flow",         sourcedFrom: "Block Jam + Yarn Flow",                                            color: "F77F00", image: "/game-ideas/22.png" },
-  { id: "g23", title: "Gelato Scoop Jam",              sourcedFrom: "Hole People + Ice Cream",                                          color: "FCBF49", image: "/game-ideas/23.png" },
-  { id: "g24", title: "Letter Block Jam",              sourcedFrom: "Wordle + Color Block Jam",                                         color: "264653", image: "/game-ideas/24.png" },
-  { id: "g25", title: "Sand Arrow Escape",             sourcedFrom: "Sand Blast + Arrows + Puzzle Escape",                              color: "2C7873", image: "/game-ideas/25.png" },
-  { id: "g26", title: "Ballista Out: Dragon Siege",    sourcedFrom: "Royalty: Rescue Puzzle + Arrow Out",              isNew: true,  color: "6FB98F", image: "/game-ideas/26.png" },
-  { id: "g27", title: "Jelly Park Merge",              sourcedFrom: "Park Merge + Drop Jelly",                                          color: "004445", image: "/game-ideas/27.png" },
-  { id: "g28", title: "Cipher Screws",                 sourcedFrom: "Screwdown + That's My Seal: Logo Puzzle",                          color: "2B580C", image: "/game-ideas/28.png" },
-  { id: "g29", title: "Screw Stack 10",                sourcedFrom: "Screwdown + Stack Em Up",                                          color: "884A39", image: "/game-ideas/29.png" },
-  { id: "g30", title: "Trait Snakes: Maze Match",      sourcedFrom: "Go-Go Out + Connect Master: Match Puzzle",                        color: "C38154", image: "/game-ideas/30.png" },
-  { id: "g31", title: "Hexa Brew",                     sourcedFrom: "Colorwood Sort + Coffee Pace",                                     color: "FFC26F", image: "/game-ideas/31.png" },
-  { id: "g32", title: "Goods Puzzle: Sort Challenge",  sourcedFrom: "Goods Puzzle + Wool Sort",                                         color: "96CEB4"                              },
-  { id: "g33", title: "Sizzle Sort Master",            sourcedFrom: "Skewer Sizzle + Penguin Go: Food Sort",                            color: "88D8B0"                              },
-  { id: "g34", title: "Transit Pull 3D",               sourcedFrom: "Seat Jam 3D + Knit Out",                                           color: "FFCC99"                              },
-  { id: "g35", title: "Jelly Number Drop",             sourcedFrom: "Fruit Merge Match-Game + Numbers",                                 color: "FF9999"                              },
-  { id: "g36", title: "Toy Car Pile-Up",               sourcedFrom: "Stomp Jam + Car",                                  isNew: true,  color: "9B2335"                              },
-  { id: "g37", title: "Astro Bot Sort: Space Silos",   sourcedFrom: "Viby Sort: Tamara Task + Space + Numbers",                        color: "0B4619"                              },
-  { id: "g38", title: "Tower Module Drop",             sourcedFrom: "Block Crush + Drop Puzzle",                                        color: "E8B4A0"                              },
-  { id: "g39", title: "Sand Sprint Escape",            sourcedFrom: "Sand Blast + Sprint Escape",                                       color: "A0C4FF"                              },
-  { id: "g40", title: "Color Cascade Merge",           sourcedFrom: "Color Block Jam + Merge Rush",                                     color: "B5EAD7"                              },
+  // ── Puzzle — images 1–31 ────────────────────────────────────────────────────
+  { id: "g1",  title: "Skewer Sizzle Jam",            sourcedFrom: "Foodie Sizzle + Farm Jam: Animal Parking Game",       isNew: true,  color: "F4845F", image: "/game-ideas/1.png",  category: "Puzzle" },
+  { id: "g2",  title: "Semantic Slide",                sourcedFrom: "Ring Crash + Associations: Colorwood Game",                         color: "E63946", image: "/game-ideas/2.png",  category: "Puzzle" },
+  { id: "g3",  title: "Conveyor Block Crush",          sourcedFrom: "Block Crush + Yarn Flow",                                           color: "2A9D8F", image: "/game-ideas/3.png",  category: "Puzzle" },
+  { id: "g4",  title: "Maze Jam: Paint & Park",        sourcedFrom: "Bubble Buz: Parking Jam Puzzle + AMAZE!",            isNew: true,  color: "6A4C93", image: "/game-ideas/4.png",  category: "Puzzle" },
+  { id: "g5",  title: "Knit Blast",                    sourcedFrom: "Sand Blast + Knit Out",                                             color: "3A86FF", image: "/game-ideas/5.png",  category: "Puzzle" },
+  { id: "g6",  title: "Traffic Transit Jam",           sourcedFrom: "Traffic Escape + Bubble Bus: Parking Jam Puzzle",                  color: "FF006E", image: "/game-ideas/6.png",  category: "Puzzle" },
+  { id: "g7",  title: "Traffic Match: Cargo Jam",      sourcedFrom: "Hotpot Go: Food Sort + Car Out",                                    color: "FB5607", image: "/game-ideas/7.png",  category: "Puzzle" },
+  { id: "g8",  title: "Blast Match 3D",                sourcedFrom: "Triple Match City + Toon Blast",                                    color: "FFBE0B", image: "/game-ideas/8.png",  category: "Puzzle" },
+  { id: "g9",  title: "Super Dispatch: Hero Jam",      sourcedFrom: "Beads Out + Superhero",                                             color: "06D6A0", image: "/game-ideas/9.png",  category: "Puzzle" },
+  { id: "g10", title: "Target Match City",             sourcedFrom: "Triple Match City + Found It!",                                     color: "118AB2", image: "/game-ideas/10.png", category: "Puzzle" },
+  { id: "g11", title: "City Gate Match",               sourcedFrom: "Triple Match City + Coffee Run Puzzle",                             color: "EF476F",                              category: "Puzzle" },
+  { id: "g12", title: "City Delivery Jam",             sourcedFrom: "Triple Match City + Skewer Jam",                                    color: "1B4332", image: "/game-ideas/12.png", category: "Puzzle" },
+  { id: "g13", title: "Lion Dance Jam",                sourcedFrom: "Crowd Express + Lion",                                              color: "7209B7", image: "/game-ideas/13.png", category: "Puzzle" },
+  { id: "g14", title: "Project SGDF: Alien Beam-Up",   sourcedFrom: "Knit Out + sgdfgbsf",                               isNew: true,  color: "480CA8", image: "/game-ideas/14.png", category: "Puzzle" },
+  { id: "g15", title: "Pride Path: Cub Rescue",        sourcedFrom: "Hole People + Lion",                                               color: "3A0CA3", image: "/game-ideas/15.png", category: "Puzzle" },
+  { id: "g16", title: "Syrup Sinkhole: Waffle Order",  sourcedFrom: "All In Hole: Black Hole Games + Waffle",            isNew: true,  color: "F72585", image: "/game-ideas/16.png", category: "Puzzle" },
+  { id: "g17", title: "Colorwood Puller 3D",           sourcedFrom: "Colorwood Sort Puzzle Game + Marble Puller",                       color: "4CC9F0", image: "/game-ideas/17.png", category: "Puzzle" },
+  { id: "g18", title: "Pixel Loop: Color Flow",        sourcedFrom: "Brilliant Sort + Hotpot Flow: Food Game",                          color: "4361EE", image: "/game-ideas/18.png", category: "Puzzle" },
+  { id: "g19", title: "Cargo Dock Jam",                sourcedFrom: "Color Block Jam + Load the Dishes",                                color: "3F37C9", image: "/game-ideas/19.png", category: "Puzzle" },
+  { id: "g20", title: "Block Conveyor Jam",            sourcedFrom: "Block Crush + Yarn Flow",                           isNew: true,  color: "560BAD", image: "/game-ideas/20.png", category: "Puzzle" },
+  { id: "g21", title: "Terminal Loop Jam",             sourcedFrom: "Mnt Jam + Yarn Flow",                                              color: "D62828", image: "/game-ideas/21.png", category: "Puzzle" },
+  { id: "g22", title: "Block Jam + Yarn Flow",         sourcedFrom: "Block Jam + Yarn Flow",                                            color: "F77F00", image: "/game-ideas/22.png", category: "Puzzle" },
+  { id: "g23", title: "Gelato Scoop Jam",              sourcedFrom: "Hole People + Ice Cream",                                          color: "FCBF49", image: "/game-ideas/23.png", category: "Puzzle" },
+  { id: "g24", title: "Letter Block Jam",              sourcedFrom: "Wordle + Color Block Jam",                                         color: "264653", image: "/game-ideas/24.png", category: "Puzzle" },
+  { id: "g25", title: "Sand Arrow Escape",             sourcedFrom: "Sand Blast + Arrows + Puzzle Escape",                              color: "2C7873", image: "/game-ideas/25.png", category: "Puzzle" },
+  { id: "g26", title: "Ballista Out: Dragon Siege",    sourcedFrom: "Royalty: Rescue Puzzle + Arrow Out",              isNew: true,  color: "6FB98F", image: "/game-ideas/26.png", category: "Puzzle" },
+  { id: "g27", title: "Jelly Park Merge",              sourcedFrom: "Park Merge + Drop Jelly",                                          color: "004445", image: "/game-ideas/27.png", category: "Puzzle" },
+  { id: "g28", title: "Cipher Screws",                 sourcedFrom: "Screwdown + That's My Seal: Logo Puzzle",                          color: "2B580C", image: "/game-ideas/28.png", category: "Puzzle" },
+  { id: "g29", title: "Screw Stack 10",                sourcedFrom: "Screwdown + Stack Em Up",                                          color: "884A39", image: "/game-ideas/29.png", category: "Puzzle" },
+  { id: "g30", title: "Trait Snakes: Maze Match",      sourcedFrom: "Go-Go Out + Connect Master: Match Puzzle",                        color: "C38154", image: "/game-ideas/30.png", category: "Puzzle" },
+  { id: "g31", title: "Hexa Brew",                     sourcedFrom: "Colorwood Sort + Coffee Pace",                                     color: "FFC26F", image: "/game-ideas/31.png", category: "Puzzle" },
+  { id: "g32", title: "Goods Puzzle: Sort Challenge",  sourcedFrom: "Goods Puzzle + Wool Sort",                                         color: "96CEB4",                              category: "Puzzle" },
+  { id: "g33", title: "Sizzle Sort Master",            sourcedFrom: "Skewer Sizzle + Penguin Go: Food Sort",                            color: "88D8B0",                              category: "Puzzle" },
+  { id: "g34", title: "Transit Pull 3D",               sourcedFrom: "Seat Jam 3D + Knit Out",                                           color: "FFCC99",                              category: "Puzzle" },
+  { id: "g35", title: "Jelly Number Drop",             sourcedFrom: "Fruit Merge Match-Game + Numbers",                                 color: "FF9999",                              category: "Puzzle" },
+  { id: "g36", title: "Toy Car Pile-Up",               sourcedFrom: "Stomp Jam + Car",                                  isNew: true,  color: "9B2335",                              category: "Puzzle" },
+  { id: "g37", title: "Astro Bot Sort: Space Silos",   sourcedFrom: "Viby Sort: Tamara Task + Space + Numbers",                        color: "0B4619",                              category: "Puzzle" },
+  { id: "g38", title: "Tower Module Drop",             sourcedFrom: "Block Crush + Drop Puzzle",                                        color: "E8B4A0",                              category: "Puzzle" },
+  { id: "g39", title: "Sand Sprint Escape",            sourcedFrom: "Sand Blast + Sprint Escape",                                       color: "A0C4FF",                              category: "Puzzle" },
+  { id: "g40", title: "Color Cascade Merge",           sourcedFrom: "Color Block Jam + Merge Rush",                                     color: "B5EAD7",                              category: "Puzzle" },
+
+  // ── Idle ───────────────────────────────────────────────────────────────────
+  { id: "i1",  title: "Merge Mine Idle",               sourcedFrom: "Idle Miner + Merge Dragon",                         isNew: true,  color: "003049", category: "Idle" },
+  { id: "i2",  title: "Factory City Idle",             sourcedFrom: "Idle Factory + City Island",                                       color: "D62828", category: "Idle" },
+  { id: "i3",  title: "Hero Clicker Tower",            sourcedFrom: "Clicker Heroes + Tower Wars",                                      color: "F77F00", category: "Idle" },
+  { id: "i4",  title: "Sweet Shop Idle",               sourcedFrom: "Idle Bakery + Candy Storm",                         isNew: true,  color: "FCBF49", category: "Idle" },
+  { id: "i5",  title: "Space Factory Rush",            sourcedFrom: "Space Miner Idle + Neon Runner X",                                 color: "EAE2B7", category: "Idle" },
+  { id: "i6",  title: "Idle Sort Puzzle",              sourcedFrom: "Idle Miner + Bolt Sort Puzzle",                                    color: "073B4C", category: "Idle" },
+  { id: "i7",  title: "Tap Farm Idle",                 sourcedFrom: "Idle Bakery + Farm Story",                                         color: "606C38", category: "Idle" },
+  { id: "i8",  title: "Clicker Kingdom Build",         sourcedFrom: "Clicker Heroes + Kingdom Build",                                   color: "283618", category: "Idle" },
+  { id: "i9",  title: "Idle Pet Paradise",             sourcedFrom: "Idle Bakery + Pet Hotel",                                          color: "DDA15E", category: "Idle" },
+  { id: "i10", title: "Mine Merge Tap",                sourcedFrom: "Idle Miner + Merge Magic",                                         color: "BC6C25", category: "Idle" },
+
+  // ── Casual ─────────────────────────────────────────────────────────────────
+  { id: "c1",  title: "Park Bus Match",                sourcedFrom: "Park Match + Bus Jam",                               isNew: true,  color: "A8E6CF", category: "Casual" },
+  { id: "c2",  title: "Dish Sort Jam",                 sourcedFrom: "Load the Dishes + Bolt Sort Puzzle",                               color: "FFD3A5", category: "Casual" },
+  { id: "c3",  title: "Transport Crowd Park",          sourcedFrom: "Transport People + Crowd Express",                                 color: "FD9853", category: "Casual" },
+  { id: "c4",  title: "Marble Match Casual",           sourcedFrom: "Marble Puller + Park Match",                        isNew: true,  color: "C5A3FF", category: "Casual" },
+  { id: "c5",  title: "Kitchen Sort Rush",             sourcedFrom: "Tiny Kitchen + Water Sort",                                        color: "FFB347", category: "Casual" },
+  { id: "c6",  title: "Match Town Drive",              sourcedFrom: "Match Town + Drive Quest",                                         color: "A8D8EA", category: "Casual" },
+  { id: "c7",  title: "Fill & Park Jam",               sourcedFrom: "Fill The Fridge + Park Match",                                     color: "AA96DA", category: "Casual" },
+  { id: "c8",  title: "Crowd Bus Connect",             sourcedFrom: "Crowd Express + Bus Jam",                                          color: "FCBAD3", category: "Casual" },
+
+  // ── Arcade ─────────────────────────────────────────────────────────────────
+  { id: "a1",  title: "Slither Neon Blast",            sourcedFrom: "Slither Blast + Neon Blaster",                      isNew: true,  color: "F72585", category: "Arcade" },
+  { id: "a2",  title: "Bubble Sky Rush",               sourcedFrom: "Bubble Pop X + Sky Rush",                                         color: "7209B7", category: "Arcade" },
+  { id: "a3",  title: "Smash Bounce Arena",            sourcedFrom: "Smash Bricks + Bounce Rush",                                      color: "3A0CA3", category: "Arcade" },
+  { id: "a4",  title: "Aqua Pixel Rush",               sourcedFrom: "Aqua Rush + Pixel Crusher",                         isNew: true,  color: "4361EE", category: "Arcade" },
+  { id: "a5",  title: "Sky Pixel Crush",               sourcedFrom: "Sky Rush + Pixel Crusher",                                        color: "4CC9F0", category: "Arcade" },
+  { id: "a6",  title: "Bounce Blast Arena",            sourcedFrom: "Bounce Rush + Slither Blast",                                     color: "560BAD", category: "Arcade" },
+  { id: "a7",  title: "Neon Bubble Blaster",           sourcedFrom: "Neon Blaster + Bubble Pop X",                                     color: "7400B8", category: "Arcade" },
+  { id: "a8",  title: "Rush Smash Clash",              sourcedFrom: "Aqua Rush + Smash Bricks",                                        color: "6930C3", category: "Arcade" },
+
+  // ── Runner ─────────────────────────────────────────────────────────────────
+  { id: "r1",  title: "Temple Drive Quest",            sourcedFrom: "Temple Dash + Drive Quest",                         isNew: true,  color: "06D6A0", category: "Runner" },
+  { id: "r2",  title: "Neon Parkour X",                sourcedFrom: "Neon Runner X + Parkour Hero",                                    color: "118AB2", category: "Runner" },
+  { id: "r3",  title: "Road Temple Dash",              sourcedFrom: "Road Rush 3D + Temple Dash",                                      color: "073B4C", category: "Runner" },
+  { id: "r4",  title: "Subway Sky Flip",               sourcedFrom: "Subway Flip + Sky Jump Pro",                        isNew: true,  color: "FFD166", category: "Runner" },
+  { id: "r5",  title: "Parkour Drive Rush",            sourcedFrom: "Parkour Hero + Drive Quest",                                      color: "EF476F", category: "Runner" },
+  { id: "r6",  title: "Temple Neon Sprint",            sourcedFrom: "Temple Dash + Neon Runner X",                                     color: "26547C", category: "Runner" },
+  { id: "r7",  title: "Sky Road Jump",                 sourcedFrom: "Sky Jump Pro + Road Rush 3D",                                     color: "FF70A6", category: "Runner" },
+  { id: "r8",  title: "Runner Match Dash",             sourcedFrom: "Drive Quest + Match Town",                                        color: "FFD166", category: "Runner" },
+
+  // ── Match3 ─────────────────────────────────────────────────────────────────
+  { id: "m1",  title: "Candy Gem Cascade",             sourcedFrom: "Candy Storm + Gem Cascade",                         isNew: true,  color: "FF4D6D", category: "Match3" },
+  { id: "m2",  title: "Royal Jewel Pop",               sourcedFrom: "Royal Match + Jewel Pop",                                         color: "FF758C", category: "Match3" },
+  { id: "m3",  title: "Cookie Fruit Blast",            sourcedFrom: "Cookie Crunch + Fruit Blast",                                     color: "FF9A3C", category: "Match3" },
+  { id: "m4",  title: "Gem Legend Match",              sourcedFrom: "Gem Cascade + Blast Legends",                       isNew: true,  color: "FFC300", category: "Match3" },
+  { id: "m5",  title: "Candy Cookie Kingdom",          sourcedFrom: "Candy Storm + Cookie Crunch",                                     color: "D62839", category: "Match3" },
+  { id: "m6",  title: "Blast Jewel Rush",              sourcedFrom: "Blast Legends + Jewel Pop",                                       color: "C77DFF", category: "Match3" },
+  { id: "m7",  title: "Royal Fruit Kingdom",           sourcedFrom: "Royal Match + Fruit Blast",                                       color: "E040FB", category: "Match3" },
+  { id: "m8",  title: "Gem Cookie Cascade",            sourcedFrom: "Gem Cascade + Cookie Crunch",                                     color: "D500F9", category: "Match3" },
+
+  // ── Strategy ───────────────────────────────────────────────────────────────
+  { id: "s1",  title: "Kingdom Merge Wars",            sourcedFrom: "Kingdom Build + Merge Dragon",                      isNew: true,  color: "264653", category: "Strategy" },
+  { id: "s2",  title: "Tower Empire Clash",            sourcedFrom: "Tower Wars + Empire Builder",                                     color: "2A9D8F", category: "Strategy" },
+  { id: "s3",  title: "Fortress Siege Match",          sourcedFrom: "Fortress Siege + Royal Match",                                    color: "E9C46A", category: "Strategy" },
+  { id: "s4",  title: "Kingdom Idle Defense",          sourcedFrom: "Kingdom Build + Clicker Heroes",                    isNew: true,  color: "F4A261", category: "Strategy" },
+  { id: "s5",  title: "War of Merge",                  sourcedFrom: "War of Kings + Merge Town",                                       color: "E76F51", category: "Strategy" },
+  { id: "s6",  title: "Tower Idle Conquest",           sourcedFrom: "Tower Wars + Idle Miner",                                         color: "1B4332", category: "Strategy" },
+  { id: "s7",  title: "Empire Simulation Builder",     sourcedFrom: "Empire Builder + City Island",                                    color: "40916C", category: "Strategy" },
+  { id: "s8",  title: "Fortress Kingdom Run",          sourcedFrom: "Fortress Siege + Kingdom Build",                                  color: "52B788", category: "Strategy" },
+
+  // ── Merge ──────────────────────────────────────────────────────────────────
+  { id: "me1", title: "Merge Dragon Town",             sourcedFrom: "Merge Dragon + Match Town",                         isNew: true,  color: "7B2D8B", category: "Merge" },
+  { id: "me2", title: "Town Magic Idle",               sourcedFrom: "Merge Town + Merge Magic",                                        color: "9B4DCA", category: "Merge" },
+  { id: "me3", title: "Merge Castle Kingdom",          sourcedFrom: "Merge Castle + Kingdom Build",                                    color: "C77DFF", category: "Merge" },
+  { id: "me4", title: "Dragon Mansion Rush",           sourcedFrom: "Merge Dragon + Merge Mansion",                      isNew: true,  color: "E0AAFF", category: "Merge" },
+  { id: "me5", title: "Magic Idle Merge",              sourcedFrom: "Merge Magic + Idle Factory",                                      color: "D4A5F5", category: "Merge" },
+  { id: "me6", title: "Mansion Match Merge",           sourcedFrom: "Merge Mansion + Park Match",                                      color: "9D4EDD", category: "Merge" },
+  { id: "me7", title: "Castle Dragon Sort",            sourcedFrom: "Merge Castle + Bolt Sort Puzzle",                                 color: "7B2FBE", category: "Merge" },
+  { id: "me8", title: "Dragon Magic Town",             sourcedFrom: "Merge Dragon + Merge Magic",                                      color: "5A189A", category: "Merge" },
+
+  // ── Hypercasual ────────────────────────────────────────────────────────────
+  { id: "h1",  title: "Stack Water Spiral",            sourcedFrom: "Stack Ball + Water Sort",                            isNew: true,  color: "00B4D8", category: "Hypercasual" },
+  { id: "h2",  title: "Helix Cube Drop",               sourcedFrom: "Helix Jump + Cube Surfer",                                        color: "0077B6", category: "Hypercasual" },
+  { id: "h3",  title: "Knife Stack Race",              sourcedFrom: "Knife Hit + Stack Ball",                                          color: "90E0EF", category: "Hypercasual" },
+  { id: "h4",  title: "Bridge Crowd Roll",             sourcedFrom: "Bridge Race + Crowd City",                          isNew: true,  color: "CAF0F8", category: "Hypercasual" },
+  { id: "h5",  title: "Paper Roller Fold",             sourcedFrom: "Paper Fold + Roller Splat",                                       color: "48CAE4", category: "Hypercasual" },
+  { id: "h6",  title: "Fill Draw Road",                sourcedFrom: "Fill Road + Draw Climber",                                        color: "023E8A", category: "Hypercasual" },
+  { id: "h7",  title: "Water Cube Sort",               sourcedFrom: "Water Sort + Cube Surfer",                                        color: "0096C7", category: "Hypercasual" },
+  { id: "h8",  title: "Crowd Helix City",              sourcedFrom: "Crowd City + Helix Jump",                                         color: "ADE8F4", category: "Hypercasual" },
+
+  // ── Simulation ─────────────────────────────────────────────────────────────
+  { id: "sim1", title: "Restaurant Farm Story",        sourcedFrom: "My Restaurant + Farm Story",                        isNew: true,  color: "606C38", category: "Simulation" },
+  { id: "sim2", title: "Garden City Sim",              sourcedFrom: "Gardenscapes + City Island",                                      color: "283618", category: "Simulation" },
+  { id: "sim3", title: "Cooking Pet Hotel",            sourcedFrom: "Cooking Diary + Pet Hotel",                                       color: "FEFAE0", category: "Simulation" },
+  { id: "sim4", title: "Home City Design",             sourcedFrom: "Homescapes + City Island",                          isNew: true,  color: "DDA15E", category: "Simulation" },
+  { id: "sim5", title: "Farm Cafe Mix",                sourcedFrom: "Farm Story + Cafe Mix",                                           color: "BC6C25", category: "Simulation" },
+  { id: "sim6", title: "Zoo Restaurant Tycoon",        sourcedFrom: "Zoo Tycoon + My Restaurant",                                      color: "588157", category: "Simulation" },
+  { id: "sim7", title: "Airport Garden",               sourcedFrom: "Airport City + Gardenscapes",                                     color: "3A5A40", category: "Simulation" },
+  { id: "sim8", title: "Dream Home Farm",              sourcedFrom: "Dream Garden + House Design",                                     color: "A3B18A", category: "Simulation" },
 ];
 
 function PremiumModal({ onClose }: { onClose: () => void }) {
@@ -290,20 +388,22 @@ export default function NBGIdeasContent() {
   const [sortBy, setSortBy] = useState("Newest First");
   const [page, setPage] = useState(1);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [ideaCategory, setIdeaCategory] = useState<IdeaCategory | "All">("All");
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
-    return ALL_GAME_IDEAS.filter(
-      (g) =>
-        g.title.toLowerCase().includes(q) ||
-        g.sourcedFrom.toLowerCase().includes(q)
-    );
-  }, [search]);
+    return ALL_GAME_IDEAS.filter((g) => {
+      const matchesSearch = g.title.toLowerCase().includes(q) || g.sourcedFrom.toLowerCase().includes(q);
+      const matchesCat = ideaCategory === "All" || g.category === ideaCategory;
+      return matchesSearch && matchesCat;
+    });
+  }, [search, ideaCategory]);
 
-  const totalPages = Math.max(1, Math.ceil(TOTAL_COUNT / PAGE_SIZE));
+  const isFiltered = search.length > 0 || ideaCategory !== "All";
+  const displayTotal = isFiltered ? filtered.length : TOTAL_COUNT;
+  const totalPages = Math.max(1, Math.ceil(displayTotal / PAGE_SIZE));
   const visibleItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const displayTotal = search ? filtered.length : TOTAL_COUNT;
   const start = (page - 1) * PAGE_SIZE + 1;
   const end = Math.min(page * PAGE_SIZE, displayTotal);
 
@@ -355,6 +455,34 @@ export default function NBGIdeasContent() {
               Unlock All
             </button>
           </div>
+        </div>
+
+        {/* ── Category filter tabs ─────────────────────────────────── */}
+        <div className="flex items-center gap-2 flex-wrap mb-5">
+          {IDEA_CATEGORIES.map((cat) => {
+            const count = cat === "All"
+              ? ALL_GAME_IDEAS.length
+              : ALL_GAME_IDEAS.filter((g) => g.category === cat).length;
+            const isActive = ideaCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => { setIdeaCategory(cat); setPage(1); }}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-[12px] font-semibold transition-all border ${
+                  isActive
+                    ? "bg-amber-500 text-white border-amber-500 shadow-sm"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-amber-300 hover:text-amber-700"
+                }`}
+              >
+                {cat}
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none ${
+                  isActive ? "bg-white/25 text-white" : "bg-gray-100 text-gray-500"
+                }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {/* ── Premium CTA banner ───────────────────────────────────── */}
@@ -460,7 +588,7 @@ export default function NBGIdeasContent() {
         )}
 
         {/* ── Pagination ───────────────────────────────────────────── */}
-        {!search && (
+        {totalPages > 1 && (
           <Pagination page={page} totalPages={totalPages} onPage={handlePageChange} />
         )}
 

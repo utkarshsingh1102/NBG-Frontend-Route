@@ -14,12 +14,15 @@ interface MainContentProps {
 }
 
 
+const COMBO_CATEGORIES = ["All", "Puzzle", "Casual", "Arcade", "Runner", "Match3", "Strategy", "Merge", "Idle", "Hypercasual", "Simulation"];
+
 export default function MainContent({ activeCategory, onCategoryChange, userGames, onNavigateToAddGame }: MainContentProps) {
   const [sourceModalOpen, setSourceModalOpen] = useState(false);
   const [targetModalOpen, setTargetModalOpen] = useState(false);
   const [sourceGame, setSourceGame] = useState<Game | null>(null);
   const [targetGames, setTargetGames] = useState<Game[]>([]);
   const [toast, setToast] = useState(false);
+  const [comboCategory, setComboCategory] = useState("All");
 
   const handleGenerate = () => {
     setToast(true);
@@ -61,14 +64,32 @@ export default function MainContent({ activeCategory, onCategoryChange, userGame
             </div>
             <button className="text-xs text-amber-600 font-semibold hover:text-amber-700 transition bg-white/70 px-3 py-1.5 rounded-lg border border-amber-200 hover:bg-white">View all →</button>
           </div>
+
+          {/* Category filter pills */}
+          <div className="flex items-center gap-1.5 flex-wrap mb-3">
+            {COMBO_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setComboCategory(cat)}
+                className={`text-[11px] px-3 py-1 rounded-full border font-semibold transition-all ${
+                  comboCategory === cat
+                    ? "bg-amber-500 text-white border-amber-500 shadow-sm"
+                    : "bg-white text-gray-500 border-gray-200 hover:border-amber-300 hover:text-amber-600"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
           <div className="flex items-stretch gap-0 overflow-x-auto pb-1 scrollbar-hide" style={{flexWrap: "nowrap"}}>
-            {POPULAR_COMBOS.map((combo, idx) => {
+            {POPULAR_COMBOS.filter((c) => comboCategory === "All" || c.group === comboCategory).map((combo, idx, arr) => {
               const g1 = getGame(combo.game1Id);
               const g2 = getGame(combo.game2Id);
               if (!g1 || !g2) return null;
               const i1 = allGames.indexOf(g1);
               const i2 = allGames.indexOf(g2);
-              const prevGroup = idx > 0 ? POPULAR_COMBOS[idx - 1].group : null;
+              const prevGroup = idx > 0 ? arr[idx - 1].group : null;
               const isNewGroup = prevGroup !== null && prevGroup !== combo.group;
               return (
                 <div key={`${combo.game1Id}-${combo.game2Id}`} className="flex items-stretch gap-0 flex-shrink-0">

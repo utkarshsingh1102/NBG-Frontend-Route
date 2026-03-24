@@ -501,6 +501,31 @@ export default function ReportsContent() {
           )}
         </div>
 
+        {/* ── Premium CTA banner ── */}
+        <div className="mb-5 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 border border-amber-200/60 rounded-2xl p-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#f59e0b" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-bold text-gray-900">
+                Unlock {REPORTS.length - UNLOCKED_COUNT} more analytics reports
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                New reports weekly · Retention, LTV &amp; CPI insights · Monetisation tips
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setPremiumOpen(true)}
+            className="flex-shrink-0 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-sm rounded-xl shadow-md shadow-amber-200 transition"
+          >
+            Get Premium →
+          </button>
+        </div>
+
         {/* ── Reports Grid ── */}
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-2">
@@ -608,30 +633,6 @@ export default function ReportsContent() {
           </div>
         )}
 
-        {/* ── Bottom CTA ── */}
-        <div className="mt-8 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 border border-amber-200/60 rounded-2xl p-6 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#f59e0b" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-bold text-gray-900">
-                Unlock {REPORTS.length - UNLOCKED_COUNT} more analytics reports
-              </p>
-              <p className="text-xs text-gray-500 mt-0.5">
-                New reports weekly · Retention, LTV &amp; CPI insights · Monetisation tips
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setPremiumOpen(true)}
-            className="flex-shrink-0 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-sm rounded-xl shadow-md shadow-amber-200 transition"
-          >
-            Get Premium →
-          </button>
-        </div>
       </main>
 
       {premiumOpen && <PremiumModal onClose={() => setPremiumOpen(false)} />}
