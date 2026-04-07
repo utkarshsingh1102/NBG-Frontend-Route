@@ -12,11 +12,8 @@ import FavouritesContent from "./FavouritesContent";
 import ReportsContent from "./ReportsContent";
 import AddNewGameContent from "./AddNewGameContent";
 import NBGIdeasContent from "./NBGIdeasContent";
-import GameFusionA from "./GameFusionA";
-import GameFusionB from "./GameFusionB";
-import GameFusionC from "./GameFusionC";
-import GameFusionD from "./GameFusionD";
-import GameFusionE from "./GameFusionE";
+import PricingContent from "./PricingContent";
+import BillingContent from "./BillingContent";
 
 export default function AppLayout() {
   const searchParams = useSearchParams();
@@ -24,6 +21,15 @@ export default function AppLayout() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activePage, setActivePage] = useState(() => searchParams.get("page") || "Game Fusion");
   const [userGames, setUserGames] = useState<Game[]>([]);
+  const [currentPlan, setCurrentPlan] = useState<string | null>(null);
+  const [planStatus, setPlanStatus] = useState<"active" | "cancelled" | null>(null);
+  const [planExpiry, setPlanExpiry] = useState<string | null>(null);
+
+  function computeExpiry(): string {
+    const d = new Date();
+    d.setDate(d.getDate() + 30);
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
 
   const [addGameDirectToForm, setAddGameDirectToForm] = useState(false);
 
@@ -49,6 +55,23 @@ export default function AppLayout() {
 
   function renderPage() {
     switch (activePage) {
+      case "Pricing":
+        return <PricingContent currentPlan={currentPlan} onSelectPlan={(plan) => {
+          setCurrentPlan(plan);
+          setPlanStatus("active");
+          setPlanExpiry(computeExpiry());
+          setActivePage("Game Fusion");
+        }} />;
+      case "Billing":
+        return (
+          <BillingContent
+            currentPlan={currentPlan}
+            planStatus={planStatus}
+            planExpiry={planExpiry}
+            onCancelPlan={() => setPlanStatus("cancelled")}
+            onAdjustPlan={() => setActivePage("Pricing")}
+          />
+        );
       case "Theme Remix":
         return (
           <ThemeRemixContent
@@ -66,51 +89,6 @@ export default function AppLayout() {
         return <ReportsContent />;
       case "NBG Ideas":
         return <NBGIdeasContent />;
-      case "Fusion A · Tab Filter":
-        return (
-          <GameFusionA
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-            userGames={userGames}
-            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
-          />
-        );
-      case "Fusion B · Category Groups":
-        return (
-          <GameFusionB
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-            userGames={userGames}
-            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
-          />
-        );
-      case "Fusion C · Smart Filter":
-        return (
-          <GameFusionC
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-            userGames={userGames}
-            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
-          />
-        );
-      case "Fusion D · Dropdown":
-        return (
-          <GameFusionD
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-            userGames={userGames}
-            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
-          />
-        );
-      case "Fusion E · Cat-First":
-        return (
-          <GameFusionE
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-            userGames={userGames}
-            onNavigateToAddGame={() => handleNavigateToAddGame(true)}
-          />
-        );
 case "Add New Game":
         return <AddNewGameContent onGameAdded={handleAddUserGame} directToForm={addGameDirectToForm} />;
       default:
@@ -127,7 +105,7 @@ case "Add New Game":
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-[#f5f6fa]">
-      <Navbar />
+      <Navbar currentPlan={currentPlan} onOpenPricing={() => handleNavChange("Pricing")} onOpenBilling={() => handleNavChange("Billing")} />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
           activeGameId={activeGameId}
